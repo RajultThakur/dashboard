@@ -3,8 +3,21 @@
 @tailwind utilities;
 
 .customTable::-webkit-scrollbar {
-    width: 0.2em;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    /* background-color: red; */
-    /* outline: 1px solid red; */
-  } 
+  width: 0.2em;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  /* background-color: red; */
+  /* outline: 1px solid red; */
+}
+
+input {
+  outline: none;
+}
+
+.addOrUpdateProduct div input,
+.addOrUpdateProduct div textarea,
+.addOrUpdateProduct div button {
+  border: 1.5px solid rgb(179 179 179);
+  border-radius: 6px;
+  padding: 5px 8px 5px 8px;
+  outline: none;
+}

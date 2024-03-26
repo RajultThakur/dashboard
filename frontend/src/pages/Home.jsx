@@ -75,10 +75,6 @@ function Home() {
         <div className="w-full max-md:overflow-hidden max-md:w-screen">
           <DataTable users={users} products={products} orders={orders} />
         </div>
-        {/* <div>
-          <h1>Data Visualization with D3.js in React</h1>
-          <DChart data={data} />
-        </div> */}
       </div>
     </>
   );

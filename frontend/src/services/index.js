@@ -21,7 +21,7 @@ export const postRequest = async (url, body) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body,
+    body: JSON.stringify(body),
   });
   console.log(response);
 

@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState } from "react";
+import { useState } from "react";
 import { createContext } from "react";
 import { getRequest, postRequest } from "../services";
 import { useEffect } from "react";
 import { BACKEND_URL } from "../config";
+import { useRef } from "react";
 
 export const AppContext = createContext();
 
@@ -19,6 +20,7 @@ export const AppContextProvider = ({ children }) => {
   });
 
   const status = ["Shipped", "Delivered", "processing", "returns"];
+  const [productId, setProductId] = useState(null);
 
   const [users, setUsers] = useState(null);
   const [error, setError] = useState(null);
@@ -35,6 +37,8 @@ export const AppContextProvider = ({ children }) => {
   const [productBuyingRange, setProductBuyingRange] = useState([]);
   const [orderBuyingRange, setOrderBuyingRange] = useState([]);
   const range = [0, 1000, 10000, 20000, 50000, 100000, 150000, 200000];
+
+  const modelRef = useRef(null);
 
   async function getAllUsers() {
     const response = await getRequest(`${BACKEND_URL}/users`);
@@ -59,18 +63,36 @@ export const AppContextProvider = ({ children }) => {
     return;
   }
 
-  function getProductById(id) {
-    const response = getRequest(`${BACKEND_URL}/products`);
+  async function getProductById(id, formattedData = false) {
+    const response = await getRequest(`${BACKEND_URL}/products/${id}`);
     if (!response.success) {
       setError(response.message);
       return [];
     }
-    return response.data;
+    const data = response.data;
+    if (formattedData) {
+      const { _id, brand, title, description, img, category, price, stock } =
+        data;
+      return {
+        id: _id,
+        brand,
+        title,
+        description,
+        img,
+        category,
+        price,
+        stock,
+      };
+    }
+    return data;
   }
 
-  function addProduct(productDetails) {
+  async function addProduct(productDetails) {
     // id, title, description, img, price, stock, brand
-    const response = postRequest(`${BACKEND_URL}/addProduct`, productDetails);
+    const response = await postRequest(
+      `${BACKEND_URL}/products/addProduct`,
+      productDetails
+    );
 
     if (!response.success) {
       setError(response.message);
@@ -161,16 +183,31 @@ export const AppContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getAllOrders();
+    if (!newOrder) return;
+    (async () => {
+      await getAllOrders();
+    })();
   }, [newOrder]);
 
   useEffect(() => {
-    getAllProducts();
+    if (!newProduct) return;
+    console.log("running");
+    (async () => {
+      await getAllProducts();
+    })();
   }, [newProduct]);
+
+  useEffect(() => {
+    (async () => {
+      await getAllOrders();
+      await getAllProducts();
+    })();
+  }, []);
 
   useEffect(() => {
     if (!products) return;
     calculateProductBuyingRange(products);
+    console.log(products);
   }, [products]);
 
   useEffect(() => {
@@ -193,6 +230,11 @@ export const AppContextProvider = ({ children }) => {
         orders,
         products,
         users,
+        addProduct,
+        getProductById,
+        productId,
+        setProductId,
+        modelRef,
       }}
     >
       {children}
