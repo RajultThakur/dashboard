@@ -56,7 +56,9 @@ const listProduct = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error.message
+            message : "internal server error",
+            error: error.message
+
         })
     }
 
@@ -113,6 +115,7 @@ const getProducts = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             success: false,
+            message : "internal server error",
             error: error.message
         })
     }
@@ -125,11 +128,12 @@ const getProductById = async (req, res) => {
         const product = await Product.findById(id);
         return res.status(201).json({
             success: true,
-            product: product
+            data: product
         })
     } catch (error) {
         res.status(500).json({
             success: false,
+            message : "Internal server error",
             error: error.message
         })
     }
@@ -141,10 +145,7 @@ const addProduct = async (req, res) => {
     let category = req.body.category
 
     try {
-        const seller = req.userData;
-        console.log(seller)
         if (typeof (category) === 'string') {
-            console.log('yes')
             category = category.split(",")
         }
         console.log(category)
@@ -168,11 +169,9 @@ const addProduct = async (req, res) => {
 
             return res.status(201).json({
                 success: true,
-                message: "updated",
-                product: newProduct,
+                data: newProduct,
             })
         }
-        console.log(req.body)
         newProduct = new Product({
             title,
             description,
@@ -181,15 +180,13 @@ const addProduct = async (req, res) => {
             stock,
             brand,
             category,
-            seller: seller._id
         })
 
         await newProduct.save();
 
         return res.status(201).json({
             success: true,
-            message: "created",
-            product: newProduct,
+            data: newProduct,
         })
     } catch (error) {
         console.log(error.message)

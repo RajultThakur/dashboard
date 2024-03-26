@@ -8,11 +8,12 @@ const getUsers = async (req, res) => {
 
         return res.status(201).json({
             success,
-            users
+            data : users
         })
 
     } catch (error) {
         return res.status(500).json({
+            success : false,
             error
         })
     }
