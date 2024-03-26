@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { createContext } from "react";
 import { getRequest, postRequest } from "../services";
 import { useEffect } from "react";
+import { BACKEND_URL } from "../config";
 
 export const AppContext = createContext();
 
@@ -34,10 +35,9 @@ export const AppContextProvider = ({ children }) => {
   const [productBuyingRange, setProductBuyingRange] = useState([]);
   const [orderBuyingRange, setOrderBuyingRange] = useState([]);
   const range = [0, 1000, 10000, 20000, 50000, 100000, 150000, 200000];
-  const url = "http://localhost:5000";
 
   async function getAllUsers() {
-    const response = await getRequest(`${url}/users`);
+    const response = await getRequest(`${BACKEND_URL}/users`);
     console.log(response);
     if (!response.success) {
       setError(response.message);
@@ -49,7 +49,7 @@ export const AppContextProvider = ({ children }) => {
   }
 
   async function getAllProducts() {
-    const response = await getRequest(`${url}/products`);
+    const response = await getRequest(`${BACKEND_URL}/products`);
     if (!response.success) {
       setError(response.message);
       return [];
@@ -60,7 +60,7 @@ export const AppContextProvider = ({ children }) => {
   }
 
   function getProductById(id) {
-    const response = getRequest(`${url}/products`);
+    const response = getRequest(`${BACKEND_URL}/products`);
     if (!response.success) {
       setError(response.message);
       return [];
@@ -70,7 +70,7 @@ export const AppContextProvider = ({ children }) => {
 
   function addProduct(productDetails) {
     // id, title, description, img, price, stock, brand
-    const response = postRequest(`${url}/addProduct`, productDetails);
+    const response = postRequest(`${BACKEND_URL}/addProduct`, productDetails);
 
     if (!response.success) {
       setError(response.message);
@@ -110,7 +110,7 @@ export const AppContextProvider = ({ children }) => {
   }
 
   async function getAllOrders() {
-    const response = await getRequest(`${url}/orders`);
+    const response = await getRequest(`${BACKEND_URL}/orders`);
     if (!response.success) {
       setError(response.message);
       return;

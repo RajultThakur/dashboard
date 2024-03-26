@@ -17,7 +17,13 @@ function Home() {
     users,
   } = useContext(AppContext);
 
-  if (!orders || !products || users) return;
+  if (!orders || !products || users) {
+    return (
+      <div className="w-[100%] h-[100%] flex items-center justify-center">
+        getting date...
+      </div>
+    );
+  }
 
   const { netProfit, stripeFee, shipping, tax, cost } = revenueStructure;
 
