@@ -56,7 +56,7 @@ const listProduct = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message : "internal server error",
+            message: "internal server error",
             error: error.message
 
         })
@@ -115,7 +115,7 @@ const getProducts = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message : "internal server error",
+            message: "internal server error",
             error: error.message
         })
     }
@@ -133,7 +133,7 @@ const getProductById = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message : "Internal server error",
+            message: "Internal server error",
             error: error.message
         })
     }
@@ -141,7 +141,7 @@ const getProductById = async (req, res) => {
 
 const addProduct = async (req, res) => {
     const { id, title, description, img, price, stock, brand } = req.body;
-
+    console.log(id);
     let category = req.body.category
 
     try {
